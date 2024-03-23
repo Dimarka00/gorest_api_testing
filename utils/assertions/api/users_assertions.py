@@ -34,7 +34,18 @@ def assert_empty_list(response):
         assert response.json() == []
 
 
-def assert_response_id_equals_to_expected_id(response, json):
-    with allure.step(f'Checking that id {response.json()[0]["id"]} in response '
-                     f'equals to expected id {json["id"]} in the created object'):
-        assert response.json()[0]['id'] == json['id']
+def assert_response_equals_to_expected(response, key, expected_value):
+    """
+    Asserts that the value corresponding to the given key in the JSON response
+    matches the expected value
+    :param response: the response object containing JSON data.
+    :param key: the key whose corresponding value needs to be compared.
+    :param expected_value: the expected value for the given key.
+    :return:
+    """
+    with allure.step(f'Checking that {key} [{response.json()[0][key]}] in response '
+                     f'equals to expected {key} [{expected_value}] in the created object'):
+        assert response.json()[0][key] == expected_value
+
+
+

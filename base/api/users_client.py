@@ -12,10 +12,10 @@ from utils.constants.routes import APIRoutes
 
 class UsersClient(APIClient):
     @allure.step('Getting all users')
-    def get_all_users_api(self, *user_id) -> Response:
+    def get_all_users_api(self, **kwargs) -> Response:
         response = self.client.request('GET', APIRoutes.USERS,
-                                       params={'id': user_id} if user_id else None,
-                                       auth=BearerAuth())
+                                       auth=BearerAuth(),
+                                       **kwargs)
         attach_response(response.json())
         return response
 
@@ -48,5 +48,4 @@ class UsersClient(APIClient):
     def create_user(self) -> DefaultUser:
         payload = CreateUser()
         response = self.post_user_api(payload)
-        attach_response(response.json())
         return DefaultUser(**response.json())
