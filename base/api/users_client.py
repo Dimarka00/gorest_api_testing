@@ -1,3 +1,5 @@
+from typing import Union
+
 import allure
 from requests import Response
 
@@ -10,13 +12,15 @@ from utils.constants.routes import APIRoutes
 
 class UsersClient(APIClient):
     @allure.step('Getting all users')
-    def get_all_users_api(self) -> Response:
-        response = self.client.request('GET', APIRoutes.USERS)
+    def get_all_users_api(self, *user_id) -> Response:
+        response = self.client.request('GET', APIRoutes.USERS,
+                                       params={'id': user_id} if user_id else None,
+                                       auth=BearerAuth())
         attach_response(response.json())
         return response
 
     @allure.step('Getting user with id {user_id}')
-    def get_user_by_id_api(self, user_id: int):
+    def get_user_by_id_api(self, user_id: Union[int, str]):
         response = self.client.request('GET', f'{APIRoutes.USERS}/{user_id}',
                                        auth=BearerAuth())
         attach_response(response.json())
@@ -24,9 +28,11 @@ class UsersClient(APIClient):
 
     @allure.step('Creating a new user')
     def post_user_api(self, payload: CreateUser):
-        return self.client.request('POST', APIRoutes.USERS,
-                                   json=payload.model_dump(by_alias=True),
-                                   auth=BearerAuth())
+        response = self.client.request('POST', APIRoutes.USERS,
+                                       json=payload.model_dump(by_alias=True),
+                                       auth=BearerAuth())
+        attach_response(response.json())
+        return response
 
     @allure.step('Updating user with id {user_id}')
     def update_user_api(self, user_id: int, payload: UpdateUser):

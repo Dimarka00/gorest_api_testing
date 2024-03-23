@@ -27,3 +27,14 @@ def assert_not_found(response):
     with allure.step(f'Checking that server response is 404 Not Found '):
         expected_json = read_json_common_response_data('resource_not_found')
         assert response.json() == expected_json
+
+
+def assert_empty_list(response):
+    with allure.step(f'Checking that server response is empty'):
+        assert response.json() == []
+
+
+def assert_response_id_equals_to_expected_id(response, json):
+    with allure.step(f'Checking that id {response.json()[0]["id"]} in response '
+                     f'equals to expected id {json["id"]} in the created object'):
+        assert response.json()[0]['id'] == json['id']
