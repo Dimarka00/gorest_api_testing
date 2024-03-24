@@ -53,62 +53,6 @@ class TestGetUser:
         assert_status_code(response, 200)
         assert_empty_list(response)
 
-    @allure.title('[GET /users] Get user by param name')
-    def test_get_user_by_name(self, class_users_client: UsersClient, function_user: DefaultUser):
-        """
-        Get the user with the name param
-        GET /users
-        """
-        response = class_users_client.get_all_users_api(params={'name': function_user.name})
-        json_response = response.json()
-
-        assert_status_code(response, 200)
-        assert_response_equals_to_expected(response, 'name', function_user.name)
-
-        validate_schema(json_response, DefaultUsersList.model_json_schema())
-
-    @allure.title('[GET /users] Get user by param email')
-    def test_get_user_by_email(self, class_users_client: UsersClient, function_user: DefaultUser):
-        """
-        Get the user with the email param
-        GET /users
-        """
-        response = class_users_client.get_all_users_api(params={'email': function_user.email})
-        json_response = response.json()
-
-        assert_status_code(response, 200)
-        assert_response_equals_to_expected(response, "email", function_user.email)
-
-        validate_schema(json_response, DefaultUsersList.model_json_schema())
-
-    @allure.title('[GET /users] Get user by param gender')
-    def test_get_user_by_gender(self, class_users_client: UsersClient, function_user: DefaultUser):
-        """
-        Get the user with the gender param
-        GET /users
-        """
-        response = class_users_client.get_all_users_api(params={'gender': function_user.gender})
-        json_response = response.json()
-
-        assert_status_code(response, 200)
-        assert_response_equals_to_expected(response, "gender", function_user.gender)
-
-        validate_schema(json_response, DefaultUsersList.model_json_schema())
-
-    @allure.title('[GET /users] Get user by param status')
-    def test_get_user_by_status(self, class_users_client: UsersClient, function_user: DefaultUser):
-        """
-        Get the user with the status param
-        GET /users
-        """
-        response = class_users_client.get_all_users_api(params={'status': function_user.status})
-        json_response = response.json()
-
-        assert_status_code(response, 200)
-        assert_response_equals_to_expected(response, "status", function_user.status)
-
-        validate_schema(json_response, DefaultUsersList.model_json_schema())
-
     @pytest.mark.parametrize('user_id', ['fjkfdgjkdl', 'k4j5k32', 'jfjk1uf__)2'])
     @allure.title('[GET /users] Get user by invalid param id')
     def test_get_user_invalid_id(self, class_users_client: UsersClient, user_id):
@@ -120,6 +64,22 @@ class TestGetUser:
 
         assert_status_code(response, 200)
         assert_empty_list(response)
+
+    @pytest.mark.parametrize("param_name", ["name", "email", "gender", "status"])
+    @allure.title('[GET /users] Get user by param {param_name}')
+    def test_get_user_by_param(self, class_users_client: UsersClient, function_user: DefaultUser, param_name):
+        """
+        Get the user with the specified param
+        GET /users
+        """
+        params = {param_name: getattr(function_user, param_name)}
+        response = class_users_client.get_all_users_api(params=params)
+        json_response = response.json()
+
+        assert_status_code(response, 200)
+        assert_response_equals_to_expected(response, param_name, getattr(function_user, param_name))
+
+        validate_schema(json_response, DefaultUsersList.model_json_schema())
 
     @allure.title('[GET /users/{id}] Get user by id')
     def test_get_user(self, class_users_client: UsersClient, function_user):
