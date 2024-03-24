@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Dict
 
 import allure
 from requests import Response
@@ -27,18 +27,33 @@ class UsersClient(APIClient):
         return response
 
     @allure.step('Creating a new user')
-    def post_user_api(self, payload: CreateUser):
+    def post_user_api(self, payload: Union['CreateUser', Dict[str, str]]):
+        if isinstance(payload, CreateUser):
+            payload_dict = payload.model_dump(by_alias=True)
+        elif isinstance(payload, dict):
+            payload_dict = payload
+        else:
+            raise ValueError("Payload should be either CreateUser instance or dict")
+
         response = self.client.request('POST', APIRoutes.USERS,
-                                       json=payload.model_dump(by_alias=True),
+                                       json=payload_dict,
                                        auth=BearerAuth())
         attach_response(response.json())
         return response
 
     @allure.step('Updating user with id {user_id}')
-    def update_user_api(self, user_id: int, payload: UpdateUser):
-        return self.client.request('PUT', f'{APIRoutes.USERS}/{user_id}',
-                                   json=payload.model_dump(by_alias=True),
-                                   auth=BearerAuth())
+    def put_user_api(self, user_id: int, payload: UpdateUser):
+        if isinstance(payload, UpdateUser):
+            payload_dict = payload.model_dump(by_alias=True)
+        elif isinstance(payload, dict):
+            payload_dict = payload
+        else:
+            raise ValueError("Payload should be either UpdateUser instance or dict")
+        response = self.client.request('PUT', f'{APIRoutes.USERS}/{user_id}',
+                                       json=payload_dict,
+                                       auth=BearerAuth())
+        attach_response(response.json())
+        return response
 
     @allure.step('Deleting user with id {user_id}')
     def delete_user_api(self, user_id: int):

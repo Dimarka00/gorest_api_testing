@@ -23,9 +23,9 @@ def assert_user(
         assert (expected_user["status"]) == actual_user.status
 
 
-def assert_not_found(response):
-    with allure.step(f'Checking that server response is 404 Not Found '):
-        expected_json = read_json_common_response_data('resource_not_found')
+def assert_response_text(response, expected_json_filename):
+    with allure.step(f'Checking that server response is {expected_json_filename}'):
+        expected_json = read_json_common_response_data(expected_json_filename)
         assert response.json() == expected_json
 
 
@@ -46,6 +46,3 @@ def assert_response_equals_to_expected(response, key, expected_value):
     with allure.step(f'Checking that {key} [{response.json()[0][key]}] in response '
                      f'equals to expected {key} [{expected_value}] in the created object'):
         assert response.json()[0][key] == expected_value
-
-
-
