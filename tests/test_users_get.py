@@ -3,13 +3,13 @@ import pytest
 
 from base.api.users_client import UsersClient
 from models.users import DefaultUsersList, DefaultUser
-from utils.assertions.api.users_assertions import (assert_empty_list, assert_not_found,
-                                                   assert_response_equals_to_expected)
+from utils.assertions.api.users_assertions import (assert_empty_list, assert_response_equals_to_expected,
+                                                   assert_response_text)
 from utils.assertions.assertions_functions import assert_status_code
 from utils.assertions.validate_schema import validate_schema
 
 
-@pytest.mark.questions
+@pytest.mark.users
 @allure.feature('Users')
 @allure.story('Users API')
 class TestGetUser:
@@ -106,4 +106,4 @@ class TestGetUser:
         response = class_users_client.get_user_by_id_api(user_id)
 
         assert_status_code(response, 404)
-        assert_not_found(response)
+        assert_response_text(response, 'resource_not_found')
