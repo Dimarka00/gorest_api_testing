@@ -14,6 +14,10 @@ from utils.assertions.validate_schema import validate_schema
 class TestPostUser:
     @allure.title('[POST /users] Create a new user with valid body')
     def test_post_user_with_full_valid_body(self, class_users_client: UsersClient):
+        """
+        Create a new user with valid body
+        POST /users
+        """
         payload = CreateUser()
 
         response = class_users_client.post_user_api(payload)
@@ -31,6 +35,10 @@ class TestPostUser:
 
     @allure.title('[POST /users] Create a new user with empty body')
     def test_post_user_with_empty_body(self, class_users_client: UsersClient):
+        """
+        Create a new user with empty body
+        POST /users
+        """
         response = class_users_client.post_user_api(payload={})
 
         assert_status_code(response, 422)
