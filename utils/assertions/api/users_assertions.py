@@ -10,16 +10,20 @@ from utils.files_utils import read_json_common_response_data
 def assert_user(
         expected_user: DefaultUser,
         actual_user: Union[DefaultUser, CreateUser, UpdateUser]):
-    with allure.step(f'Checking that "User "name" {expected_user["name"]} equals to {actual_user.name}'):
+    with allure.step(f'Checking that expected "User "name" {expected_user["name"]} in response '
+                     f'equals to actual {actual_user.name} in payload'):
         assert (expected_user["name"]) == actual_user.name
 
-    with allure.step(f'Checking that "User email" {expected_user["email"]} equals to {actual_user.email}'):
+    with allure.step(f'Checking that expected "User email" {expected_user["email"]} in response '
+                     f'equals to actual {actual_user.email} in payload'):
         assert (expected_user["email"]) == actual_user.email
 
-    with allure.step(f'Checking that "User gender" {expected_user["gender"]} equals to {actual_user.gender}'):
+    with allure.step(f'Checking that expected "User gender" {expected_user["gender"]} in response '
+                     f'equals to actual {actual_user.gender} in payload'):
         assert (expected_user["gender"]) == actual_user.gender
 
-    with allure.step(f'Checking that "User status" {expected_user["status"]} equals to {actual_user.status}'):
+    with allure.step(f'Checking that expected "User status" {expected_user["status"]} in response '
+                     f'equals to {actual_user.status} in payload'):
         assert (expected_user["status"]) == actual_user.status
 
 
