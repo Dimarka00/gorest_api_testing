@@ -42,7 +42,7 @@ class UsersClient(APIClient):
         return response
 
     @allure.step('Updating user with id {user_id}')
-    def put_user_api(self, user_id: int, payload: UpdateUser):
+    def put_user_api(self, user_id: int, payload: Union['UpdateUser', Dict[str, str]]):
         if isinstance(payload, UpdateUser):
             payload_dict = payload.model_dump(by_alias=True)
         elif isinstance(payload, dict):

@@ -1,15 +1,15 @@
-from typing import Union
+from typing import Union, Dict
 
 import allure
 
+from conftest import function_user
 from models.users import DefaultUser, CreateUser, UpdateUser
 from utils.files_utils import read_json_common_response_data
 
 
 def assert_user(
         expected_user: DefaultUser,
-        actual_user: Union[DefaultUser, CreateUser, UpdateUser]
-):
+        actual_user: Union[DefaultUser, CreateUser, UpdateUser]):
     with allure.step(f'Checking that "User "name" {expected_user["name"]} equals to {actual_user.name}'):
         assert (expected_user["name"]) == actual_user.name
 
