@@ -13,7 +13,7 @@ from utils.assertions.validate_schema import validate_schema
 @allure.story('Users API')
 class TestPostUser:
     @allure.title('[POST /users] Create a new user with valid body')
-    def test_post_user_with_full_valid_body(self, class_users_client: UsersClient):
+    def test_post_user_with_valid_body(self, class_users_client: UsersClient):
         """
         Create a new user with valid body
         POST /users
@@ -32,6 +32,17 @@ class TestPostUser:
         validate_schema(
             json_response, DefaultUser.model_json_schema()
         )
+
+    @allure.title('[POST /users] Create a new user with invalid body')
+    def test_post_user_with_invalid_json(self, class_users_client: UsersClient):
+        """
+        Create a new user with empty body
+        POST /users
+        """
+        response = class_users_client.post_user_api(payload={"name": ","})
+
+        assert_status_code(response, 422)
+        assert_response_text(response, 'unprocessable_entity_without_name')
 
     @allure.title('[POST /users] Create a new user with empty body')
     def test_post_user_with_empty_body(self, class_users_client: UsersClient):
