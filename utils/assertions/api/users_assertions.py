@@ -1,11 +1,9 @@
-import json
-from typing import Union, Dict
+from typing import Union
 
 import allure
 
-from conftest import function_user
 from models.users import DefaultUser, CreateUser, UpdateUser
-from utils.attach_api_response_to_test import attach_expected_json
+from utils.attach_api_response_to_test import attach_expected_json, attach_response
 from utils.files_utils import read_json_common_response_data
 
 
@@ -33,6 +31,7 @@ def assert_response_text(response, expected_json_filename):
     with allure.step(f'Checking that server response is {expected_json_filename}'):
         expected_json = read_json_common_response_data(expected_json_filename)
         attach_expected_json(expected_json_filename)
+        attach_response(response.json())
         assert response.json() == expected_json
 
 
