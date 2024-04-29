@@ -1,8 +1,9 @@
 import json
+import os
 
 
 def get_test_data_path():
-    return "test_data"
+    return os.path.join(os.path.dirname(__file__), "..", "test_data")
 
 
 def get_common_response_path():
